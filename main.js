@@ -46,6 +46,8 @@ chuckNorris.src = "hero.png";
 
 var player = new Player();
 var keyboard = new Keyboard();
+var enemy = new Enemy();
+var bullet = new Bullet();
 
 function run()
 {

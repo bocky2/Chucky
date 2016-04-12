@@ -3,8 +3,8 @@
 var Enemy = function()
 {
 	this.image = document.createElement("img");
-	this.x = canvas.width/2;
-	this.y = canvas.height/2;
+	this.x = 0;
+	this.y = 0;
 	this.width = 274;
 	this.height = 209;
 	this.velocityX = 0;
