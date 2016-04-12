@@ -13,20 +13,7 @@ var Bullet = function()
 	this.rotation = 0;
 	this.image.src = "golem.png";
 }
-Bullet.prototype.update = function(deltatime)
-{
-	if( typeof(this.rotation) == "undefined" )
-		this.rotation = 0;
-	
-	if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true)
-	{
-		this.rotation -= deltatime;
-	}
-	else
-	{
-		this.rotation += deltatime;
-	}
-}
+
 Bullet.prototype.draw = function()
 {
 	context.save();

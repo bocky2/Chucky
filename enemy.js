@@ -14,20 +14,7 @@ var Enemy = function()
 	
 	this.image.src = "golem.png";
 }
-Enemy.prototype.update = function(deltatime)
-{
-	if( typeof(this.rotation) == "undefined" )
-		this.rotation = 0;
-	
-	if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true)
-	{
-		this.rotation -= deltatime;
-	}
-	else
-	{
-		this.rotation += deltatime;
-	}
-}
+
 Enemy.prototype.draw = function()
 {
 	context.save();
