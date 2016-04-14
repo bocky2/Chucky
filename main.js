@@ -44,10 +44,13 @@ var fpsTime = 0;
 var chuckNorris = document.createElement("img");
 chuckNorris.src = "hero.png";
 
+var bullets = [];
+
 var player = new Player();
 var keyboard = new Keyboard();
 var enemy = new Enemy();
-var bullet = new Bullet();
+var bullets = [];
+bullets.push(new Bullet());
 
 function run()
 {
@@ -58,7 +61,16 @@ function run()
 	
 	player.update(deltaTime);
 	player.draw();
-		
+	
+	enemy.update(deltaTime);
+	enemy.draw();
+	
+	for(var i = 0; i < bullets.length; ++i)
+	{
+		bullets[i].update(deltaTime);
+		bullets[i].draw();
+	}
+	
 	// update the frame counter 
 	fpsTime += deltaTime;
 	fpsCount++;

@@ -1,19 +1,28 @@
 //VECTOR2
 
-var Vector2 = function();
+var Vector2 = function(x,y)
 {
-	this.x;
-	this.y;
+	this.x = 0;
+	this.y = 0;
 	
-	if(x ! = undefined)
+	if(x != undefined)
 	{
 		this.x = x;
 	}
-	if(y ! = undefined)
+	if(y != undefined)
 	{
 		this.y = y;
 	}
 	
+	this.reverse = function()
+	{
+		this.x = -this.x;
+		this.y = -this.y;
+	}
+	this.copy = function()
+	{
+		return new Vector2(this.x, this.y);
+	}
 	this.set = function(newX, newY)
 	{
 		this.x = newX;
@@ -53,5 +62,7 @@ var Vector2 = function();
 		
 		var dirX = (this.x * c) - (this.y * s);
 		var dirY = (this.x * s) + (this.y * c);
+		
+		this.set(dirX, dirY);
 	}
 }
