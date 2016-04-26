@@ -7,6 +7,8 @@ var endFrameMillis = Date.now();
 // This function will return the time in seconds since the function 
 // was last called
 // You should only call this function once per frame
+
+
 function getDeltaTime()
 {
 	endFrameMillis = startFrameMillis;
@@ -27,6 +29,7 @@ function getDeltaTime()
 	return deltaTime;
 }
 
+
 //-------------------- Don't modify anything above here
 
 var SCREEN_WIDTH = canvas.width;
@@ -40,15 +43,70 @@ var fps = 0;
 var fpsCount = 0;
 var fpsTime = 0;
 
+
+
+var LAYER_COUNT = 6;
+var LAYER_BACKGOUND = 0;
+var LAYER_TORCHES = 1;
+var LAYER_LAVA = 2;
+var LAYER_PLATFORMS = 3;
+var LAYER_LADDERS = 4;
+var LAYER_EXIT = 5;
+
+var MAP = {tw:54, th:15};
+var TILE = 35;
+var TILESET_TILE = TILE * 2;
+var TILESET_PADDING = 2;
+var TILESET_SPACING = 2;
+var TILESET_COUNT_X = 14;
+var TILESET_COUNT_Y = 14;
+
+ // abitrary choice for 1m
+var METER = TILE;
+ // very exaggerated gravity (6x)
+var GRAVITY = METER * 9.8 * 6;
+ // max horizontal speed (10 tiles per second)
+var MAXDX = METER * 10;
+ // max vertical speed (15 tiles per second)
+var MAXDY = METER * 15;
+ // horizontal acceleration - take 1/2 second to reach maxdx
+var ACCEL = MAXDX * 2;
+ // horizontal friction - take 1/6 second to stop from maxdx
+var FRICTION = MAXDX * 6;
+ // (a large) instantaneous jump impulse
+var JUMP = METER * 1500;
+
+var cells = [];
+function initialize() {
+	for(var layerIdx = 0; layerIdx < LAYER_COUNT; layerIdx++) {
+		cells[layerIdx] = [];
+		var idx = 0;
+		for (var y = 0; y < level1.layers[layerIdx].height; y++) {
+			cells[layerIdx][y] = [];
+			for(var x = 0; x < level1.layers[layerIdx].width; x++) {
+				if(level1.layers[layerIdx].data[idx] != 0) {
+					cells[layerIdx][y][x] = 1;
+					cells[layerIdx][y-1][x] = 1;
+					cells[layerIdx][y-1][x+1] = 1;
+					cells[layerIdx][y][x+1] = 1;
+				}
+				else if(cells[layerIdx][y][x] != 1) {
+					cells[layerIdx][y][x] = 0;
+				}
+				idx++;
+			}
+		}
+	}
+}
+
 // load an image to draw
 var chuckNorris = document.createElement("img");
 chuckNorris.src = "hero.png";
 
-var bullets = [];
-
 var player = new Player();
 var keyboard = new Keyboard();
 var enemy = new Enemy();
+
 var bullets = [];
 bullets.push(new Bullet());
 
@@ -58,6 +116,8 @@ function run()
 	context.fillRect(0, 0, canvas.width, canvas.height);
 	
 	var deltaTime = getDeltaTime();
+	
+	drawMap();
 	
 	player.update(deltaTime);
 	player.draw();
@@ -87,6 +147,7 @@ function run()
 	context.fillText("FPS: " + fps, 5, 20, 100);
 }
 
+initialize();
 
 //-------------------- Don't modify anything below here
 
