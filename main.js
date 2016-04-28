@@ -64,15 +64,15 @@ var TILESET_COUNT_Y = 14;
  // abitrary choice for 1m
 var METER = TILE;
  // very exaggerated gravity (6x)
-var GRAVITY = METER * 9.8 * 6;
+var GRAVITY = METER * 9.8 * 1;
  // max horizontal speed (10 tiles per second)
-var MAXDX = METER * 10;
+var MAXDX = METER * 5;
  // max vertical speed (15 tiles per second)
-var MAXDY = METER * 15;
+var MAXDY = METER * 7;
  // horizontal acceleration - take 1/2 second to reach maxdx
-var ACCEL = MAXDX * 2;
+var ACCEL = MAXDX * 1.5;
  // horizontal friction - take 1/6 second to stop from maxdx
-var FRICTION = MAXDX * 6;
+var FRICTION = MAXDX * 2;
  // (a large) instantaneous jump impulse
 var JUMP = METER * 1500;
 
@@ -144,7 +144,12 @@ function run()
 	// draw the FPS
 	context.fillStyle = "#f00";
 	context.font="14px Arial";
-	context.fillText("FPS: " + fps, 5, 20, 100);
+	context.fillText("FPS: " + fps, 5, 520, 100);
+	
+	context.fillStyle = "red";
+	context.fillRect(10, 10, health, 15);
+	
+
 }
 
 initialize();
