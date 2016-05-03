@@ -2,29 +2,25 @@
 
 var Enemy = function()
 {
-	this.image = document.createElement("img");
-	this.position = new Vector2(canvas.width/2, canvas.height/2);
-	this.width = 274;
-	this.height = 209;
-	this.velocity = new Vector2();
-	this.angularVelocity = 0;
-	var speed = 120;
-	
-	while(this.velocity.magnitude() == 0)
+	this.idleSprite = new Sprite("golem idle-walk.png");
+	this.idleSprite.buildAnimation(6, 1, 228, 174, 0,
+		[0, 1, 2, 3, 4, 5,]);
+	for(var i=0; i<ANIM_MAX; i++)
 	{
-		this.velocity.set(rand(-10, 10), rand(-10, 10));
+		this.idleSprite.setAnimationOffset(i, -55, -87);
 	}
-	this.velocity.normalize();
+
+	this.position = new Vector2();
+	this.position.set( 9*TILE, 0*TILE );
 	
-	var offset = this.velocity.copy();
-	offset.set(offset.x * canvas.width,
-			   offset.y * canvas.height);
-	this.position.add(offset);
+	this.width = 228;
+	this.height = 174;
 	
-	this.velocity.reverse();
-	this.velocity.multiplyScalar(speed);
+	this.velocity = new Vector2();
 	
-	this.image.src = "golem.png";
+	this.falling = true;
+	
+	this.direction = LEFT;
 }
 Enemy.prototype.update = function(deltatime)
 {

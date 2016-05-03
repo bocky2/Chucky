@@ -14,7 +14,7 @@ var Bullet = function()
 	this.velocity.rotateDirection(this.rotation);
 	this.velocity.multiplyScalar(speed);
 	
-	this.image.src = "bullet.png";
+
 }
 
 Bullet.prototype.update = function(deltatime)

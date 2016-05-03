@@ -122,8 +122,7 @@ function run()
 	player.update(deltaTime);
 	player.draw();
 	
-	enemy.update(deltaTime);
-	enemy.draw();
+
 	
 	for(var i = 0; i < bullets.length; ++i)
 	{
