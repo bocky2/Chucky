@@ -146,10 +146,18 @@ function run()
 	context.font="14px Arial";
 	context.fillText("FPS: " + fps, 5, 520, 100);
 	
-	context.fillStyle = "red";
+	context.fillStyle = "IndianRed";
 	context.fillRect(10, 10, health, 15);
 	
-
+	if(health > 0)
+	{
+		health-=deltaTime;
+	}
+	context.fillStyle = "black";
+	context.rect(10, 10, 200, 15);
+	context.stroke();
+	context.font="bold 14px Arial";
+	context.fillText("HEALTH", 11, 22.5, 60);
 }
 
 initialize();
