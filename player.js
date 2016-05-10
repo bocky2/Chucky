@@ -12,6 +12,7 @@ var ANIM_WALK_RIGHT = 5;
 var ANIM_MAX = 6;
 
 var health = 200;
+var shield = 200;
 var hitTimer = 2;
 
 var Player = function()
@@ -85,17 +86,19 @@ Player.prototype.update = function(deltaTime)
 			}
 		}
 	}
-	if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true)
-	{
-		jump = true;
-		if(left == true) {
-			this.sprite.setAnimation(ANIM_JUMP_LEFT);
-		}
-		if(right == true) {
-			this.sprite.setAnimation(ANIM_JUMP_RIGHT);
+	if(this.falling == false) {
+		if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true)
+		{
+			jump = true;
+			if(left == true) {
+				this.sprite.setAnimation(ANIM_JUMP_LEFT);
+			}	
+			if(right == true) {
+				this.sprite.setAnimation(ANIM_JUMP_RIGHT);
+			}
 		}
 	}
-
+		
 	var wasleft = this.velocity.x < 0;
 	var wasright = this.velocity.x > 0;
 	var falling = this.falling;
@@ -126,16 +129,11 @@ Player.prototype.update = function(deltaTime)
 		}
 	}
 	// calculate the new position and velocity:
-	this.position.y = Math.floor(this.position.y + (deltaTime * this.velocity.y));
-	this.position.x = Math.floor(this.position.x + (deltaTime * this.velocity.x));
+	this.position.y = Math.round(this.position.y + (deltaTime * this.velocity.y));
+	this.position.x = Math.round(this.position.x + (deltaTime * this.velocity.x));
 	this.velocity.x = bound(this.velocity.x + (deltaTime * ddx), -MAXDX, MAXDX);
 	this.velocity.y = bound(this.velocity.y + (deltaTime * ddy), -MAXDY, MAXDY);
 	
-	// calculate the new position and velocity:
-	this.position.y = Math.floor(this.position.y + (deltaTime * this.velocity.y));
-	this.position.x = Math.floor(this.position.x + (deltaTime * this.velocity.x));
-	this.velocity.x = bound(this.velocity.x + (deltaTime * ddx), -MAXDX, MAXDX);
-	this.velocity.y = bound(this.velocity.y + (deltaTime * ddy), -MAXDY, MAXDY);
 	if ((wasleft && (this.velocity.x > 0)) ||
 	(wasright && (this.velocity.x < 0)))
 	{
@@ -143,35 +141,7 @@ Player.prototype.update = function(deltaTime)
 	this.velocity.x = 0;
 	}
 
-	
-	// collision detection
-	// Our collision detection logic is greatly simplified by the fact that the
-	// player is a rectangle and is exactly the same size as a single tile.
-	// So we know that the player can only ever occupy 1, 2 or 4 cells.
 
-	// This means we can short-circuit and avoid building a general purpose
-	// collision detection engine by simply looking at the 1 to 4 cells that
-	// the player occupies:
-	var tx = pixelToTile(this.position.x);
-	var ty = pixelToTile(this.position.y);
-	var nx = (this.position.x)%TILE; 		// true if player overlaps right
-	var ny = (this.position.y)%TILE; 		// true if player overlaps below
-	var cell = cellAtTileCoord(LAYER_PLATFORMS, tx, ty);
-	var cellright = cellAtTileCoord(LAYER_PLATFORMS, tx + 1, ty);
-	var celldown = cellAtTileCoord(LAYER_PLATFORMS, tx, ty + 1);
-	var celldiag = cellAtTileCoord(LAYER_PLATFORMS, tx + 1, ty + 1);
-	
-	// calculate the new position and velocity:
-	this.position.y = Math.floor(this.position.y + (deltaTime * this.velocity.y));
-	this.position.x = Math.floor(this.position.x + (deltaTime * this.velocity.x));
-	this.velocity.x = bound(this.velocity.x + (deltaTime * ddx), -MAXDX, MAXDX);
-	this.velocity.y = bound(this.velocity.y + (deltaTime * ddy), -MAXDY, MAXDY);
-	if ((wasleft && (this.velocity.x > 0)) ||
-	(wasright && (this.velocity.x < 0)))
-	{
-		// clamp at zero to prevent friction from making us jiggle side to side
-		this.velocity.x = 0;
-	}
 	// collision detection
 	// Our collision detection logic is greatly simplified by the fact that the
 	// player is a rectangle and is exactly the same size as a single tile.

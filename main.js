@@ -64,17 +64,17 @@ var TILESET_COUNT_Y = 14;
  // abitrary choice for 1m
 var METER = TILE;
  // very exaggerated gravity (6x)
-var GRAVITY = METER * 9.8 * 1;
+var GRAVITY = METER * 9.8 * 4;
  // max horizontal speed (10 tiles per second)
-var MAXDX = METER * 5;
+var MAXDX = METER * 9;
  // max vertical speed (15 tiles per second)
-var MAXDY = METER * 7;
+var MAXDY = METER * 17;
  // horizontal acceleration - take 1/2 second to reach maxdx
-var ACCEL = MAXDX * 1.5;
+var ACCEL = MAXDX * 3;
  // horizontal friction - take 1/6 second to stop from maxdx
-var FRICTION = MAXDX * 2;
+var FRICTION = MAXDX * 2.5;
  // (a large) instantaneous jump impulse
-var JUMP = METER * 1500;
+var JUMP = METER * 150000;
 
 var cells = [];
 function initialize() {
@@ -106,6 +106,8 @@ chuckNorris.src = "hero.png";
 var player = new Player();
 var keyboard = new Keyboard();
 var enemy = new Enemy();
+var grenadeIcon = new GrenadeIcon();
+
 
 var bullets = [];
 bullets.push(new Bullet());
@@ -122,6 +124,7 @@ function run()
 	player.update(deltaTime);
 	player.draw();
 	
+	grenadeIcon.draw();
 
 	
 	for(var i = 0; i < bullets.length; ++i)
@@ -145,18 +148,27 @@ function run()
 	context.font="14px Arial";
 	context.fillText("FPS: " + fps, 5, 520, 100);
 	
-	context.fillStyle = "IndianRed";
-	context.fillRect(10, 10, health, 15);
+	context.fillStyle = "#ff1a1a";
+	context.fillRect(1680, 400, health, 15);
 	
 	if(health > 0)
 	{
 		health-=deltaTime;
 	}
 	context.fillStyle = "black";
-	context.rect(10, 10, 200, 15);
+	context.rect(1680, 400, 200, 15);
 	context.stroke();
 	context.font="bold 14px Arial";
-	context.fillText("HEALTH", 11, 22.5, 60);
+	context.fillText("HEALTH", 1681, 412, 60);
+	
+	context.fillStyle = "#1fe5e5"
+	context.fillRect(1680, 420, shield, 15);
+	
+	context.fillStyle = "black";
+	context.rect(1680, 420, 200, 15);
+	context.stroke();
+	context.font="bold 14px Arial";
+	context.fillText("SHIELD", 1681, 432, 60);
 }
 
 initialize();
