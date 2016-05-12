@@ -2,8 +2,7 @@
 
 var Grenade = function()
 {
-	
-	
+
 }
 
 var GrenadeIcon = function()
@@ -13,10 +12,9 @@ var GrenadeIcon = function()
 	this.image.src ="grenadeicon.png";
 }
 
+var grenadeCount = 3;
 
-GrenadeIcon.prototype.draw = function()
+GrenadeIcon.prototype.draw = function(x, y)
 {
-	DrawImage(context, this.image, 1710, 480, 0);
-	DrawImage(context, this.image, 1780, 480, 0);
-	DrawImage(context, this.image, 1850, 480, 0);
+	DrawImage(context, this.image, x, y, 0);
 }

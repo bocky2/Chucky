@@ -112,6 +112,8 @@ var grenadeIcon = new GrenadeIcon();
 var bullets = [];
 bullets.push(new Bullet());
 
+var score = 0;
+
 function run()
 {
 	context.fillStyle = "#ccc";		
@@ -124,8 +126,15 @@ function run()
 	player.update(deltaTime);
 	player.draw();
 	
-	grenadeIcon.draw();
-
+	if(grenadeCount >= 3){
+		grenadeIcon.draw(1850, 480);
+	}
+	if(grenadeCount >= 2) {
+		grenadeIcon.draw(1780, 480);
+	}
+	if(grenadeCount >= 1) {
+		grenadeIcon.draw(1710, 480);
+	}
 	
 	for(var i = 0; i < bullets.length; ++i)
 	{
@@ -147,6 +156,10 @@ function run()
 	context.fillStyle = "#f00";
 	context.font="14px Arial";
 	context.fillText("FPS: " + fps, 5, 520, 100);
+	
+	context.fillStyle = "limegreen";
+	context.font="bold 30px Fixedsys Regular"
+	context.fillText("S C O R E  =  " + score, 5, 30, 100);
 	
 	context.fillStyle = "#ff1a1a";
 	context.fillRect(1680, 400, health, 15);
