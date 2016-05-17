@@ -43,17 +43,20 @@ var fps = 0;
 var fpsCount = 0;
 var fpsTime = 0;
 
+var STATE_SPLASH = 0;
+var STATE_GAME = 1;
+var STATE_GAMEOVER = 2;
 
+var gameState = STATE_SPLASH;
 
-var LAYER_COUNT = 6;
+var LAYER_COUNT = 5;
 var LAYER_BACKGOUND = 0;
 var LAYER_TORCHES = 1;
 var LAYER_LAVA = 2;
 var LAYER_PLATFORMS = 3;
-var LAYER_LADDERS = 4;
-var LAYER_EXIT = 5;
+var LAYER_EXIT = 4;
 
-var MAP = {tw:54, th:15};
+var MAP = {tw:54, th:17};
 var TILE = 35;
 var TILESET_TILE = TILE * 2;
 var TILESET_PADDING = 2;
@@ -77,6 +80,10 @@ var FRICTION = MAXDX * 2.5;
 var JUMP = METER * 150000;
 
 var cells = [];
+
+var musicBackground;
+var sfxFire;
+
 function initialize() {
 	for(var layerIdx = 0; layerIdx < LAYER_COUNT; layerIdx++) {
 		cells[layerIdx] = [];
@@ -97,6 +104,24 @@ function initialize() {
 			}
 		}
 	}
+	musicBackground = new Howl(
+	{
+		urls: ["02 Sidekick.mp3"],
+		loop: true,
+		buffer: true,
+		volume: 0.75
+	} );
+	musicBackground.play();
+	
+	sfxFire = new Howl(
+	{
+		urls: ["cg1.wav"],
+		buffer: true,
+		volume: 1,
+		onend: function() {
+			isSfxPlaying = false;
+		}
+	} );
 }
 
 // load an image to draw
@@ -108,16 +133,33 @@ var keyboard = new Keyboard();
 var enemy = new Enemy();
 var grenadeIcon = new GrenadeIcon();
 
-
 var bullets = [];
 bullets.push(new Bullet());
 
-var score = 0;
+var background = {
+	image: document.createElement("img")
+}
+background.image.src = "Background.png";
 
-function run()
+var score = 0;
+var splashTimer = 3;
+
+function runSplash(deltaTime)
 {
-	context.fillStyle = "#ccc";		
-	context.fillRect(0, 0, canvas.width, canvas.height);
+	splashTimer -= deltaTime;
+	if(splashTimer <= 0)
+	{
+		gameState = STATE_GAME;
+		return;
+	}
+	
+	
+}
+
+function runGame()
+{
+
+	DrawImage(context, background.image, 945, 262.5, 0);
 	
 	var deltaTime = getDeltaTime();
 	
@@ -142,6 +184,7 @@ function run()
 		bullets[i].draw();
 	}
 	
+	
 	// update the frame counter 
 	fpsTime += deltaTime;
 	fpsCount++;
@@ -157,12 +200,14 @@ function run()
 	context.font="14px Arial";
 	context.fillText("FPS: " + fps, 5, 520, 100);
 	
-	context.fillStyle = "limegreen";
-	context.font="bold 30px Fixedsys Regular"
-	context.fillText("S C O R E  =  " + score, 5, 30, 100);
+	context.fillStyle = "#e67300";
+	context.font="bold 30px FangSong"
+	context.fillText("SCORE  =  " + score, 5, 30, 300);
 	
 	context.fillStyle = "#ff1a1a";
 	context.fillRect(1680, 400, health, 15);
+	
+	score += 1000;
 	
 	if(health > 0)
 	{
@@ -184,6 +229,29 @@ function run()
 	context.fillText("SHIELD", 1681, 432, 60);
 }
 
+function runGameOver(deltaTime)
+{
+	
+}
+
+function run()
+{
+	context.fillStyle = "#ccc";
+	context.fillRect(0, 0, canvas.width, canvas.height);
+	var deltaTime = getDeltaTime();
+	switch(gameState)
+	{
+		case STATE_SPLASH:
+			runSplash(deltaTime);
+			break;
+		case STATE_GAME:
+			runGame();
+			break;
+		case STATE_GAMEOVER:
+			runGameOver(deltaTime);
+			break;
+	}
+}
 initialize();
 
 //-------------------- Don't modify anything below here

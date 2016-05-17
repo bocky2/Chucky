@@ -36,7 +36,7 @@ var Player = function()
 	}
 
 	this.position = new Vector2();
-	this.position.set( 1*TILE, 8*TILE );
+	this.position.set( 1*TILE, 5*TILE );
 	
 	this.width = 159;
 	this.height = 163;
@@ -47,6 +47,8 @@ var Player = function()
 	this.jumping = false;
 	
 	this.direction = LEFT;
+	
+	this.cooldownTimer = 0;
 };
 
 Player.prototype.update = function(deltaTime)
@@ -86,8 +88,15 @@ Player.prototype.update = function(deltaTime)
 			}
 		}
 	}
+	
+	if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true && this.cooldownTimer <= 0) {
+		sfxFire.play();
+		this.cooldownTimer = 0.3;
+		// Shoot a bullet
+	}
+	
 	if(this.falling == false) {
-		if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true)
+		if(keyboard.isKeyDown(keyboard.KEY_UP) == true)
 		{
 			jump = true;
 			if(left == true) {
@@ -104,6 +113,7 @@ Player.prototype.update = function(deltaTime)
 	var falling = this.falling;
 	var ddx = 0; // acceleration
 	var ddy = GRAVITY;
+	
 	
 	if (left)
 	ddx = ddx - ACCEL; // player wants to go left
