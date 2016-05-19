@@ -49,12 +49,16 @@ var STATE_GAMEOVER = 2;
 
 var gameState = STATE_SPLASH;
 
-var LAYER_COUNT = 5;
+
+var enemies = [];
+
+var LAYER_COUNT = 6;
 var LAYER_BACKGOUND = 0;
 var LAYER_TORCHES = 1;
 var LAYER_LAVA = 2;
 var LAYER_PLATFORMS = 3;
 var LAYER_EXIT = 4;
+var LAYER_ENEMY = 5;
 
 var MAP = {tw:54, th:17};
 var TILE = 35;
@@ -81,6 +85,9 @@ var JUMP = METER * 150000;
 
 var cells = [];
 
+var ENEMY_MAXDX = METER * 5;
+var ENEMY_ACCEL = ENEMY_MAXDX * 2;
+
 var musicBackground;
 var sfxFire;
 
@@ -104,6 +111,19 @@ function initialize() {
 			}
 		}
 	}
+	// add enemies
+	idx = 0;
+	for(var y = 0; y < level1.layers[LAYER_ENEMY].height; y++) {
+		for(var x = 0; x < level1.layers[LAYER_ENEMY].width; x++) {
+			if(level1.layers[LAYER_ENEMY].data[idx] != 0) {
+				var px = tileToPixel(x);
+				var py = tileToPixel(y);
+				var e = new Enemy(px, py);
+				enemies.push(e);
+			}
+			idx++;
+		}
+	} 
 	musicBackground = new Howl(
 	{
 		urls: ["02 Sidekick.mp3"],
@@ -130,7 +150,6 @@ chuckNorris.src = "hero.png";
 
 var player = new Player();
 var keyboard = new Keyboard();
-var enemy = new Enemy();
 var grenadeIcon = new GrenadeIcon();
 
 var bullets = [];
@@ -141,8 +160,13 @@ var background = {
 }
 background.image.src = "Background.png";
 
+var splashThing = {
+	image:document.createElement("img")
+}
+splashThing.image.src = "splash screen.png"
+
 var score = 0;
-var splashTimer = 3;
+var splashTimer = 4;
 
 function runSplash(deltaTime)
 {
@@ -153,15 +177,13 @@ function runSplash(deltaTime)
 		return;
 	}
 	
-	
+	DrawImage(context, splashThing.image, 945, 262.5, 0);
 }
 
-function runGame()
+function runGame(deltaTime)
 {
 
 	DrawImage(context, background.image, 945, 262.5, 0);
-	
-	var deltaTime = getDeltaTime();
 	
 	drawMap();
 	
@@ -184,6 +206,14 @@ function runGame()
 		bullets[i].draw();
 	}
 	
+	for(var i=0; i<enemies.length; i++)
+	{
+		enemies[i].update(deltaTime);
+	}
+	for(var i=0; i<enemies.length; i++)
+	{
+		enemies[i].draw();
+	}
 	
 	// update the frame counter 
 	fpsTime += deltaTime;
@@ -245,7 +275,7 @@ function run()
 			runSplash(deltaTime);
 			break;
 		case STATE_GAME:
-			runGame();
+			runGame(deltaTime);
 			break;
 		case STATE_GAMEOVER:
 			runGameOver(deltaTime);

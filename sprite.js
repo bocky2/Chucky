@@ -86,7 +86,7 @@ Sprite.prototype.isFinished = function()
 	return false;
 }
 
-Sprite.prototype.update = function(dt) {
+Sprite.prototype.update = function(deltaTime) {
 	if(this.animations.length == 0)
 		return;
 	if(this.animations[this.currentAnimation].length == 0)
@@ -95,7 +95,7 @@ Sprite.prototype.update = function(dt) {
 	if(this.animations[this.currentAnimation][this.currentFrame].duration < 0)
 		return;
 	
-	this.frameTime += dt;
+	this.frameTime += deltaTime;
 	
 	while(this.frameTime > this.animations[this.currentAnimation][this.currentFrame].duration)
 	{
