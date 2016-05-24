@@ -13,7 +13,7 @@ var ANIM_MAX = 6;
 
 var health = 200;
 var shield = 200;
-var hitTimer = 2;
+var hitTimer = 0;
 
 var Player = function()
 {
@@ -38,8 +38,8 @@ var Player = function()
 	this.position = new Vector2();
 	this.position.set( 1*TILE, 5*TILE );
 	
-	this.width = 159;
-	this.height = 163;
+	this.width = 100;
+	this.height = 110;
 	
 	this.velocity = new Vector2();
 	

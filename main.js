@@ -163,7 +163,12 @@ background.image.src = "Background.png";
 var splashThing = {
 	image:document.createElement("img")
 }
-splashThing.image.src = "splash screen.png"
+splashThing.image.src = "splash screen.png";
+
+var overThing = {
+	image:document.createElement("img")
+}
+overThing.image.src = "gameover.png";
 
 var score = 0;
 var splashTimer = 4;
@@ -224,7 +229,57 @@ function runGame(deltaTime)
 		fps = fpsCount;
 		fpsCount = 0;
 	}		
-		
+	
+	var hit=false;
+	for(var i=0; i<bullets.length; i++)
+	{
+		bullets[i].update(deltaTime);
+		if( bullets[i].position.x < 0 ||
+			bullets[i].position.x > SCREEN_WIDTH)
+		{
+			hit = true;
+		}
+		for(var j=0; j<enemies.length; j++)
+		{
+			if(intersects( bullets[i].position.x, bullets[i].position.y, TILE, TILE,
+			enemies[j].position.x, enemies[j].position.y, TILE, TILE) == true)
+			{
+				// kill both the bullet and the enemy
+				enemies.splice(j, 1);
+				hit = true;
+				// increment the player score
+				score += 1;
+				break;
+			}
+		}
+		if(hit == true)
+		{
+			bullets.splice(i, 1);
+			break;
+		}
+	}
+	for(var i=0; i<enemies.length; i++)
+		{
+			if(intersects(
+			enemies[i].position.x - 160/2 + 55, enemies[i].position.y - 160/2 + 30, 85, 85,
+			player.position.x - player.width/2 + 65, player.position.y - player.height/2 + 30, player.width/3, player.height/2) == true)
+			{
+				enemies[i].hit = true;
+				if(hitTimer <= 0){
+					hitTimer = hitTimer + 3;
+					health = health - 200/3;
+				}
+			}
+			else{
+				enemies[i].hit = false;
+			}
+		}
+	
+	if(hitTimer > 0)
+	{
+		hitTimer -= deltaTime;
+	}
+	
 	// draw the FPS
 	context.fillStyle = "#f00";
 	context.font="14px Arial";
@@ -235,14 +290,8 @@ function runGame(deltaTime)
 	context.fillText("SCORE  =  " + score, 5, 30, 300);
 	
 	context.fillStyle = "#ff1a1a";
-	context.fillRect(1680, 400, health, 15);
+	context.fillRect(1680, 400, health, 15);	
 	
-	score += 1000;
-	
-	if(health > 0)
-	{
-		health-=deltaTime;
-	}
 	context.fillStyle = "black";
 	context.rect(1680, 400, 200, 15);
 	context.stroke();
@@ -257,11 +306,17 @@ function runGame(deltaTime)
 	context.stroke();
 	context.font="bold 14px Arial";
 	context.fillText("SHIELD", 1681, 432, 60);
+	
+	if(health <= 0)
+	{
+		gameState = STATE_GAMEOVER;
+		return;
+	}
 }
 
 function runGameOver(deltaTime)
 {
-	
+	DrawImage(context, overThing.image, 945, 262.5, 0);
 }
 
 function run()

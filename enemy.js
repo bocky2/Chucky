@@ -1,53 +1,39 @@
 //ENEMY
-var golemANIM_IDLE_LEFT = 0;
-var golemANIM_IDLE_RIGHT = 1;
-var golemANIM_ATTACK_LEFT = 0;
-var golemANIM_ATTACK_RIGHT = 1;
-var golemANIM_APPEAR_LEFT = 0;
-var golemANIM_APPEAR_RIGHT = 1;
-var golemANIM_DIE_LEFT = 0;
-var golemANIM_DIE_RIGHT = 1;
-
+var golemANIM_IDLE = 0;
+var golemANIM_ATTACK = 1;
 
 var Enemy = function(x,y)
 {
-	this.idleSprite = new Sprite("golem idle-walk.png");
-	this.idleSprite.buildAnimation(6, 2, 161, 124, 0.1,
-		[0, 1, 2, 3, 4, 5,]);
-	this.idleSprite.buildAnimation(6, 2, 230, 176, 0.1, 
-		[11, 10, 9, 8, 7, 6]);
-	this.idleSprite.setAnimationOffset(0, -55, -87);
-	
-	this.attackSprite = new Sprite("golem attack.png");
-	this.attackSprite.buildAnimation(6, 2, 264, 186, 0.05,
+	this.sprite = new Sprite("golem.png");
+	this.sprite.buildAnimation(6, 2, 185, 130, 0.1,
 		[0, 1, 2, 3, 4, 5]);
-	this.attackSprite.buildAnimation(6, 2, 264, 186, 0.05,
-		[11, 10, 9, 8, 7, 6]);
-
-	this.appearSprite = new Sprite("golem appear.png");
-	this.appearSprite.buildAnimation(15, 2, 228, 174, 0.05,
-		[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
-	this.appearSprite.buildAnimation(15, 2, 228, 174, 0.05,
-		[29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15]);
+	this.sprite.setAnimationOffset(0, -90, -91);
+	this.sprite.buildAnimation(6, 2, 185, 130, 0.1,
+		[6, 7, 8, 9, 10, 11]);
+	this.sprite.setAnimationOffset(1, -90, -91);
 		
-	this.dieSprite = new Sprite("golem die.png");
-	this.dieSprite.buildAnimation(7, 2, 228, 252, 0.05,
-		[0, 1, 2, 3, 4, 5, 6]);
-	this.dieSprite.buildAnimation(7, 2, 228, 252, 0.05,
-		[13, 12, 11, 10, 9, 8, 7]);
-	
 		
-
 	this.position = new Vector2();
 	this.position.set(x, y);
 	this.velocity = new Vector2();
 	this.moveRight = true;
 	this.pause = 0;
+	
+	this.hit = false;
 }
 Enemy.prototype.update = function(deltaTime)
 {	
-	this.idleSprite.update(deltaTime);
+	this.sprite.update(deltaTime);
 
+	if(this.hit == true)
+	{
+		if(this.sprite.currentAnimation != golemANIM_ATTACK)
+		this.sprite.setAnimation(golemANIM_ATTACK);
+	}
+	else{
+		if(this.sprite.currentAnimation != golemANIM_IDLE)
+		this.sprite.setAnimation(golemANIM_IDLE);
+	}
 
 	if(this.pause > 0)
 	{
@@ -94,5 +80,5 @@ Enemy.prototype.update = function(deltaTime)
 
 Enemy.prototype.draw = function()
 {
-	this.idleSprite.draw(context, this.position.x, this.position.y);
+	this.sprite.draw(context, this.position.x, this.position.y);
 }
